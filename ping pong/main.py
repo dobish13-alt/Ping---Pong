@@ -13,12 +13,18 @@ class GameSprite(sprite.Sprite):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
 class Player(GameSprite):
-    def update(self):
+    def update_left(self):
         keys = key.get_pressed()
-        if keys[K_a] and self.rect.x > 5:
-            self.rect.x -= self.speed 
-        if keys[K_d] and self.rect.x < win_w - 70:
-            self.rect.x += self.speed
+        if keys[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed 
+        if keys[K_s] and self.rect.y < win_h - 148:
+            self.rect.y += self.speed
+    def update_right(self):
+        keys = key.get_pressed()
+        if keys[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed 
+        if keys[K_DOWN] and self.rect.y < win_h - 148:
+            self.rect.y += self.speed
 
 class Ball(GameSprite):
     def update(self):
@@ -31,7 +37,11 @@ window = display.set_mode((win_w, win_h))
 
 display.set_caption("Ping Pong")
 
-background = transform.scale(image.load("..."), (win_w, win_h))
+background = transform.scale(image.load("unnamed.png"), (win_w, win_h))
+
+player_left = Player("rocket.png", 5, 10, 36, 143, 10)
+player_right = Player("rocket.png", win_w - 41, win_h - 153, 36, 143, 10)
+
 clock = time.Clock()
 FPS = 60
 run = True
@@ -43,7 +53,12 @@ while run:
             run = False
         
     if not finish:
+        player_left.update_left()
+        player_right.update_right()
+
         window.blit(background, (0, 0))
+        player_left.reset()
+        player_right.reset()
 
             
     display.update()
